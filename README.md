@@ -18,8 +18,6 @@
     <br>To download latest ReGameDLL_CS: <a href="https://github.com/s1lentq/ReGameDLL_CS/actions?query=is%3Asuccess+branch%3Amaster+event%3Apush">Lastest Action (Master Builds) of ReHLDS here</a>
 </p>
 
-
-
 ------
 
 <h3>Settings and variables</h3>
