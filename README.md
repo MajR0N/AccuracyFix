@@ -33,14 +33,15 @@
     //
     af_spread_all "-1.0"
     
-    // Spread multiplier per player state (0.0 - 1.0), multiplied with the weapon value
-    // 1.0 = leave the weapon value as is, 0.0 = no spread in that state
-    // A player is in exactly one state: air > moving > ducking > standing
+    // Spread multiplier per player state (0.0 - 2.0), multiplied with the weapon value
+    // 1.0 = leave the weapon value as is, 0.0 = no spread in that state, 2.0 = double the spread
+    // A player is in exactly one state: air > walking (shift) > moving > ducking > standing
     //
     // Default "1.0"
     //
     af_spread_stand "1.0"
-    af_spread_move "1.0"
+    af_spread_walk "1.0"
+af_spread_move "1.0"
     af_spread_duck "1.0"
     af_spread_air "1.0"
     

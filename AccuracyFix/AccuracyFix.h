@@ -8,7 +8,7 @@
 #define FTRACE_FLASH                    (1<<17)
 #define FTRACE_KNIFE                    (1<<18)
 
-enum PlayerState { STATE_STAND, STATE_MOVE, STATE_DUCK, STATE_AIR, STATE_MAX };
+enum PlayerState { STATE_STAND, STATE_WALK, STATE_MOVE, STATE_DUCK, STATE_AIR, STATE_MAX };
 
 class CAccuracyFix
 {

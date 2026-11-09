@@ -7,8 +7,9 @@ void CAccuracyFix::ServerActivate()
 	// Spread multiplier for all weapons, >= 0 overrides the per weapon values, -1 = use per weapon
 	this->m_af_spread_all = gAccuracyUtil.CvarRegister("af_spread_all", "-1.0");
 
-	// Spread multiplier (0.0 - 1.0) per player state, multiplied with the weapon value
+	// Spread multiplier (0.0 - 2.0) per player state, multiplied with the weapon value
 	this->m_af_spread_state[STATE_STAND] = gAccuracyUtil.CvarRegister("af_spread_stand", "1.0");
+	this->m_af_spread_state[STATE_WALK] = gAccuracyUtil.CvarRegister("af_spread_walk", "1.0");
 	this->m_af_spread_state[STATE_MOVE] = gAccuracyUtil.CvarRegister("af_spread_move", "1.0");
 	this->m_af_spread_state[STATE_DUCK] = gAccuracyUtil.CvarRegister("af_spread_duck", "1.0");
 	this->m_af_spread_state[STATE_AIR] = gAccuracyUtil.CvarRegister("af_spread_air", "1.0");
@@ -82,7 +83,7 @@ void CAccuracyFix::TraceLine(const float* vStart, const float* vEnd, int fNoMons
 
 	auto Scale = (this->m_af_spread_all->value >= 0.0f) ? this->m_af_spread_all->value : this->m_af_spread[WeaponID]->value;
 
-	// ponytail: one state wins (air > move > duck > stand), no separate duck+move value
+	// ponytail: one state wins (air > walk > move > duck > stand), no separate duck+move value
 	auto State = STATE_STAND;
 
 	if (!(Player->pev->flags & FL_ONGROUND))
@@ -91,7 +92,8 @@ void CAccuracyFix::TraceLine(const float* vStart, const float* vEnd, int fNoMons
 	}
 	else if (Player->pev->velocity.Length2D() > 10.0f)
 	{
-		State = STATE_MOVE;
+		// Shift-walk is the +speed key, which CS sends as IN_RUN
+		State = (Player->pev->button & IN_RUN) ? STATE_WALK : STATE_MOVE;
 	}
 	else if (Player->pev->flags & FL_DUCKING)
 	{
@@ -100,7 +102,7 @@ void CAccuracyFix::TraceLine(const float* vStart, const float* vEnd, int fNoMons
 
 	auto StateScale = this->m_af_spread_state[State]->value;
 
-	Scale *= (StateScale < 0.0f) ? 0.0f : ((StateScale > 1.0f) ? 1.0f : StateScale);
+	Scale *= (StateScale < 0.0f) ? 0.0f : ((StateScale > 2.0f) ? 2.0f : StateScale);
 
 	if (Scale < 0.0f)
 	{
