@@ -71,28 +71,3 @@ void CAccuracyUtil::ServerCommand(const char* Format, ...)
 
 	g_engfuncs.pfnServerCommand(Command);
 }
-
-TraceResult CAccuracyUtil::GetUserAiming(edict_t* pEntity, float DistanceLimit)
-{
-	TraceResult Result = { };
-
-	if (!FNullEnt(pEntity))
-	{
-		auto EntityIndex = g_engfuncs.pfnIndexOfEdict(pEntity);
-
-		if (EntityIndex > 0 && EntityIndex <= gpGlobals->maxClients)
-		{
-			Vector v_forward;
-
-			Vector v_src = pEntity->v.origin + pEntity->v.view_ofs;
-
-			g_engfuncs.pfnAngleVectors(pEntity->v.v_angle, v_forward, NULL, NULL);
-
-			Vector v_dest = v_src + v_forward * DistanceLimit;
-			
-			g_engfuncs.pfnTraceLine(v_src, v_dest, 0, pEntity, &Result);
-		}
-	}
-
-	return Result;
-}
